@@ -13,7 +13,14 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.format.annotation.DateTimeFormat;
 
-
+/**
+ *
+ * 考勤记录
+ *
+ * @author yangxiao
+ * @date 2021-04-06 10:21
+ * @return
+ **/
 @Data
 @EqualsAndHashCode(callSuper = false)
 @TableName("attendance_record")
