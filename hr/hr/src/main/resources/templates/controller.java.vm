@@ -1,4 +1,4 @@
-package com.syxx.hr.controller;
+package ${package.Controller};
 
 
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -7,29 +7,44 @@ import com.github.pagehelper.PageInfo;
 import com.syxx.hr.common.result.Result;
 import com.syxx.hr.common.result.ResultUtil;
 import com.syxx.hr.common.utils.StringUtils;
+#if(${restControllerStyle})
 import org.springframework.web.bind.annotation.RestController;
+#else
+import org.springframework.stereotype.Controller;
+#end
+#if(${superControllerClassPackage})
+import ${superControllerClassPackage};
+#end
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import com.syxx.hr.service.AttendanceRecordService;
-import com.syxx.hr.entity.AttendanceRecord;
+import com.syxx.hr.service.${table.serviceName};
+import com.syxx.hr.entity.${entity};
 
 import java.util.List;
 
-/**
- *
- * 考勤记录控制器3
- *
- * @author yangxiao
- * @date 2021-04-06 10:24
- **/
 @Slf4j
+#if(${restControllerStyle})
 @RestController
-@RequestMapping("/attendancerecord")
-public class AttendanceRecordController {
+#else
+@Controller
+#end
+#set($path=${entity})
+@RequestMapping("/$path.toLowerCase()")
+#if(${kotlin})
+class ${table.controllerName}#if(${superControllerClass}) : ${superControllerClass}()#end
+
+#else
+#if(${superControllerClass})
+public class ${table.controllerName} extends ${superControllerClass} {
+#else
+public class ${table.controllerName} {
+#end
+#set($str=${table.serviceName})
+#set($service=$str.substring(0,1).toLowerCase()+$str.substring(1))
     @Autowired
-    private AttendanceRecordService attendanceRecordService;
+    private ${table.serviceName} $service;
 
     @GetMapping("getById/{id}")
     public Result getById(@PathVariable Integer id)
@@ -38,38 +53,38 @@ public class AttendanceRecordController {
         {
             return ResultUtil.parameterError();
         }
-        return ResultUtil.success(attendanceRecordService.getEntityById(id));
+        return ResultUtil.success(${service}.getEntityById(id));
     }
 
     @PostMapping("getListByCondition")
-    public Result getListByCondition(@RequestBody AttendanceRecord condition,@RequestParam("pageIndex") Integer pageIndex,@RequestParam("pageSize") Integer pageSize)
+    public Result getListByCondition(@RequestBody ${entity} condition,@RequestParam("pageIndex") Integer pageIndex,@RequestParam("pageSize") Integer pageSize)
     {
         if(condition==null || pageIndex==null || pageIndex< 1||pageSize==null||pageSize< 1){
 		 return ResultUtil.parameterError();
         }
 		PageHelper.startPage(pageIndex, pageSize);
-        List<AttendanceRecord> list= attendanceRecordService.getListByCondition(condition);
-		PageInfo<AttendanceRecord> result = new PageInfo<>(list);
+        List<${entity}> list= ${service}.getListByCondition(condition);
+		PageInfo<${entity}> result = new PageInfo<>(list);
         return ResultUtil.success(result);
     }
 
     @PostMapping("add")
-    public Result add(@RequestBody AttendanceRecord entity)
+    public Result add(@RequestBody ${entity} entity)
     {
         if(entity==null){
 		return ResultUtil.parameterError();
         }
-        return ResultUtil.judgmentResult(attendanceRecordService.saveEntity(entity));
+        return ResultUtil.judgmentResult(${service}.saveEntity(entity));
     }
 
 
     @PutMapping("update")
-    public Result update(@RequestBody AttendanceRecord entity)
+    public Result update(@RequestBody ${entity} entity)
     {
         if(entity==null){
 		return ResultUtil.parameterError();
         }
-        return ResultUtil.judgmentResult(attendanceRecordService.updateEntity(entity));
+        return ResultUtil.judgmentResult(${service}.updateEntity(entity));
     }
 
 
@@ -79,7 +94,7 @@ public class AttendanceRecordController {
         if(id==null){
 		 return ResultUtil.parameterError();
         }
-        return ResultUtil.judgmentResult(attendanceRecordService.deleteById(id));
+        return ResultUtil.judgmentResult(${service}.deleteById(id));
     }
 
     @DeleteMapping("batchDelete")
@@ -89,7 +104,8 @@ public class AttendanceRecordController {
         {
 		  return ResultUtil.parameterError();
         }
-        return ResultUtil.judgmentResult(attendanceRecordService.deleteByIds(ids));
+        return ResultUtil.judgmentResult(${service}.deleteByIds(ids));
     }
 }
 
+#end

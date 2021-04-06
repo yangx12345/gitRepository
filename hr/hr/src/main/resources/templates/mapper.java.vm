@@ -1,0 +1,22 @@
+package ${package.Mapper};
+
+import ${package.Entity}.${entity};
+import ${superMapperClassPackage};
+
+import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
+
+#if(${kotlin})
+interface ${table.mapperName} : ${superMapperClass}<${entity}>
+#else
+@Mapper
+public interface ${table.mapperName} extends ${superMapperClass}<${entity}> {
+
+    /**
+     * 根据查询条件查询实体列表
+     */
+    List<${entity}> getListByCondition(${entity} condition);
+
+}
+#end

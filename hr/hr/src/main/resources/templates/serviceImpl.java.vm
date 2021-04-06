@@ -1,0 +1,68 @@
+package ${package.ServiceImpl};
+
+import ${package.Entity}.${entity};
+import ${package.Mapper}.${table.mapperName};
+import ${package.Service}.${table.serviceName};
+import ${superServiceImplClassPackage};
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import cn.hutool.core.convert.Convert;
+
+
+
+import java.util.Arrays;
+import java.util.List;
+
+@Service
+@Transactional(readOnly = true)
+@Slf4j
+#foreach($field in ${table.fields})
+    #if(${field.keyFlag})
+        #set($keyPropertyName=${field.propertyName})
+    #end
+#end
+#if(${kotlin})
+open class ${table.serviceImplName} : ${superServiceImplClass}<${table.mapperName}, ${entity}>(), ${table.serviceName} {
+
+        }
+#else
+public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.mapperName}, ${entity}>implements ${table.serviceName} {
+
+    @Override
+    public ${entity} getEntityById(Integer id){
+        return this.getById(id);
+    }
+
+    @Override
+    public List<${entity}>getListByCondition(${entity} condition){
+		return baseMapper.getListByCondition(condition);
+    }
+
+    @Override
+    @Transactional(readOnly=false,rollbackFor=Exception.class)
+    public boolean saveEntity(${entity} entity){
+        return this.save(entity);
+    }
+
+    @Override
+    @Transactional(readOnly=false,rollbackFor=Exception.class)
+    public boolean updateEntity(${entity} entity){
+        return this.updateById(entity);
+    }
+
+    @Override
+    @Transactional(readOnly=false,rollbackFor=Exception.class)
+    public boolean deleteById(Integer id){
+        return this.removeById(id);
+    }
+
+    @Override
+    @Transactional(readOnly=false,rollbackFor=Exception.class)
+    public boolean deleteByIds(String ids){
+        Integer[]Ids=Convert.toIntArray(ids);
+        List<Integer>idList=Arrays.asList(Ids);
+        return this.removeByIds(idList);
+    }
+}
+#end

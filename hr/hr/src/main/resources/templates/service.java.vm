@@ -1,0 +1,44 @@
+package ${package.Service};
+
+import ${package.Entity}.${entity};
+import ${superServiceClassPackage};
+import java.util.List;
+
+
+#if(${kotlin})
+interface ${table.serviceName} : ${superServiceClass}<${entity}>
+#else
+public interface ${table.serviceName} extends ${superServiceClass}<${entity}> {
+
+    /**
+     * 根据id查询实体列表
+     */
+    public ${entity} getEntityById(Integer id);
+
+    /**
+     * 根据条件查询实体列表
+     */
+    public List<${entity}> getListByCondition(${entity} condition);
+
+    /**
+     *  保存实体
+     */
+    public boolean saveEntity(${entity} entity);
+
+    /**
+     *  更新实体
+     */
+    public boolean updateEntity(${entity} entity);
+
+    /**
+     *  根据id删除实体
+     */
+    public boolean deleteById(Integer id);
+
+    /**
+     *  根据id列表删除
+     */
+    public boolean deleteByIds(String ids);
+
+}
+#end
