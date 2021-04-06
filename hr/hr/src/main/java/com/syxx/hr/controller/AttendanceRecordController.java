@@ -17,6 +17,13 @@ import com.syxx.hr.entity.AttendanceRecord;
 
 import java.util.List;
 
+/**
+ *
+ * 考勤记录控制器
+ *
+ * @author yangxiao
+ * @date 2021-04-06 10:24
+ **/
 @Slf4j
 @RestController
 @RequestMapping("/attendancerecord")
