@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.syxx.hr.mapper.DepartmentMapper">
+        <!-- 通用查询映射结果 -->
+        <resultMap id="BaseResultMap" type="com.syxx.hr.entity.Department">
+                    <id column="id" property="id"/>
+                    <result column="name" property="name"/>
+                    <result column="parentId" property="parentId"/>
+                    <result column="depPath" property="depPath"/>
+                    <result column="enabled" property="enabled"/>
+                    <result column="isParent" property="isParent"/>
+        </resultMap>
+
+    <sql id="selectVo">
+        select
+        id, name, parentId, depPath, enabled, isParent
+       from department a
+    </sql>
+    <select id="getListByCondition" resultMap="BaseResultMap">
+        <include refid="selectVo"></include>
+         where id in
+        <foreach collection="ids" item="id" index="index" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+        <if test="condition.name!=null and condition.name!=''">
+            and a.name like "%" #{condition.name} "%"
+        </if>
+        <if test="condition.enabled!=null">
+            and a.enabled = #{condition.enabled}
+        </if>
+    </select>
+
+    <select id="getDepPathById" parameterType="integer" resultType="string">
+        select depPath from department where id = #{deptId}
+    </select>
+    <select id="getDeptChildernIds" parameterType="string" resultType="java.lang.Integer">
+        select id from department where depPath like  #{depPath} "%"
+    </select>
+
+    <update id="batchUpdateStatus">
+        update department set enabled = #{enabled} where id in
+        <foreach collection="childrenIds" item="id" index="index" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </update>
+
+</mapper>

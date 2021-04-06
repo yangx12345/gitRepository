@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.syxx.hr.mapper.EmpsalaryMapper">
+        <!-- 通用查询映射结果 -->
+        <resultMap id="BaseResultMap" type="com.syxx.hr.entity.Empsalary">
+                    <id column="id" property="id"/>
+                    <result column="eid" property="eid"/>
+                    <result column="name" property="name"/>
+                    <result column="workId" property="workId"/>
+                    <result column="basicSalary" property="basicSalary"/>
+                    <result column="bonus" property="bonus"/>
+                    <result column="lunchSalary" property="lunchSalary"/>
+                    <result column="trafficSalary" property="trafficSalary"/>
+                    <result column="allSalary" property="allSalary"/>
+                    <result column="pensionBase" property="pensionBase"/>
+                    <result column="pensionPer" property="pensionPer"/>
+                    <result column="remark" property="remark"/>
+                    <result column="medicalBase" property="medicalBase"/>
+                    <result column="medicalPer" property="medicalPer"/>
+                    <result column="accumulationFundBase" property="accumulationFundBase"/>
+                    <result column="accumulationFundPer" property="accumulationFundPer"/>
+                    <result column="salary_date" property="salaryDate"/>
+                    <result column="attendance_salary" property="attendanceSalary"/>
+                    <result column="realSalary" property="realSalary"/>
+        </resultMap>
+
+    <sql id="selectVo">
+        select
+        id, eid, name, workId, basicSalary, bonus, lunchSalary, trafficSalary, allSalary, pensionBase, pensionPer, remark, medicalBase, medicalPer, accumulationFundBase, accumulationFundPer, salary_date, attendance_salary, realSalary
+       from empsalary a
+    </sql>
+    <select id="getListByCondition" parameterType="com.syxx.hr.entity.Empsalary" resultMap="BaseResultMap">
+        <include refid="selectVo"></include>
+         where 1=1
+        <if test="name!=null and name!= ''">
+            and a.name like "%" #{name} "%"
+        </if>
+        <if test="workId!=null and workId!=''">
+            and a.workId = #{workId}
+        </if>
+        <if test="salaryDate!=null">
+            and a.salary_date = #{salaryDate}
+        </if>
+        <if test="eid!=null and eid!=''">
+            and a.eid = #{eid}
+        </if>
+        order by salary_date desc
+    </select>
+
+</mapper>

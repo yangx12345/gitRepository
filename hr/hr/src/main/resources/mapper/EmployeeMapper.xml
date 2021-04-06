@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.syxx.hr.mapper.EmployeeMapper">
+        <!-- 通用查询映射结果 -->
+        <resultMap id="BaseResultMap" type="com.syxx.hr.entity.Employee">
+                    <id column="id" property="id"/>
+                    <result column="username" property="username"/>
+                    <result column="password" property="password"/>
+                    <result column="name" property="name"/>
+                    <result column="gender" property="gender"/>
+                    <result column="birthday" property="birthday"/>
+                    <result column="role" property="role"/>
+                    <result column="idCard" property="idCard"/>
+                    <result column="wedlock" property="wedlock"/>
+                    <result column="nationId" property="nationId"/>
+                    <result column="nativePlace" property="nativePlace"/>
+                    <result column="politicId" property="politicId"/>
+                    <result column="email" property="email"/>
+                    <result column="phone" property="phone"/>
+                    <result column="address" property="address"/>
+                    <result column="departmentId" property="departmentId"/>
+                    <result column="jobLevelId" property="jobLevelId"/>
+                    <result column="posId" property="posId"/>
+                    <result column="engageForm" property="engageForm"/>
+                    <result column="tiptopDegree" property="tiptopDegree"/>
+                    <result column="specialty" property="specialty"/>
+                    <result column="school" property="school"/>
+                    <result column="beginDate" property="beginDate"/>
+                    <result column="workState" property="workState"/>
+                    <result column="workID" property="workID"/>
+                    <result column="contractTerm" property="contractTerm"/>
+                    <result column="conversionTime" property="conversionTime"/>
+                    <result column="notWorkDate" property="notWorkDate"/>
+                    <result column="beginContract" property="beginContract"/>
+                    <result column="endContract" property="endContract"/>
+                    <result column="workAge" property="workAge"/>
+                    <result column="registerStatus" property="registerStatus"/>
+        </resultMap>
+
+    <sql id="selectVo">
+        select
+        id, username, password, name, gender, birthday, role, idCard, wedlock, nationId, nativePlace, politicId, email, phone, address, departmentId, jobLevelId, posId, engageForm, tiptopDegree, specialty, school, beginDate, workState, workID, contractTerm, conversionTime, notWorkDate, beginContract, endContract, workAge,registerStatus
+       from employee a
+    </sql>
+    <select id="getListByCondition" parameterType="com.syxx.hr.entity.Employee" resultMap="BaseResultMap">
+        <include refid="selectVo"></include>
+         where departmentId in
+        <foreach collection="ids" item="id" index="index" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+        <if test="condition.idCard!=null and condition.idCard!=''">
+            and a.idCard like "%" #{condition.idCard} "%"
+        </if>
+        <if test="condition.name!=null and condition.name!=''">
+            and a.name like "%" #{condition.name} "%"
+        </if>
+        <if test="condition.workID!=null and condition.workID!=''">
+            and a.workID = #{condition.workID}
+        </if>
+        <if test="condition.workState!=null">
+            and a.workState = #{condition.workState}
+        </if>
+        <if test="condition.registerStatus!=null and condition.registerStatus!=''">
+            and a.registerStatus = #{condition.registerStatus}
+        </if>
+    </select>
+
+    <select id="getEmployeeByDeptId" parameterType="com.syxx.hr.entity.Employee" resultMap="BaseResultMap">
+        select id,workId,name from employee
+        where departmentId in
+        <foreach collection="ids" item="id" index="index" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+    <select id="getEmployeeByCurrentDeptId" parameterType="com.syxx.hr.entity.Employee" resultMap="BaseResultMap">
+        select id,workId,name from employee
+        where departmentId  = #{deptId}
+    </select>
+    <select id="getEmployeeInfoByWordId" parameterType="com.syxx.hr.entity.Employee" resultMap="BaseResultMap">
+        select id,workId,name from employee
+        where workId  = #{workId}
+    </select>
+    <select id="getTiptopDegreeChartData" resultType="string">
+        select count(*) FROM employee  where tiptopDegree = '博士'
+        UNION ALL
+        select count(*)  FROM employee  where tiptopDegree = '硕士'
+        UNION ALL
+        select count(*)  FROM employee  where tiptopDegree = '本科'
+        UNION ALL
+        select count(*)  FROM employee  where tiptopDegree = '大专'
+        UNION ALL
+        select count(*)  FROM employee  where tiptopDegree = '高中'
+        UNION ALL
+        select count(*)  FROM employee  where tiptopDegree = '初中'
+        UNION ALL
+        select count(*)  FROM employee  where tiptopDegree = '小学'
+        UNION ALL
+        select count(*)  FROM employee  where tiptopDegree = '其他'
+    </select>
+
+</mapper>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.syxx.hr.mapper.EmployeetrainMapper">
+        <!-- 通用查询映射结果 -->
+        <resultMap id="BaseResultMap" type="com.syxx.hr.entity.Employeetrain">
+                    <id column="id" property="id"/>
+                    <result column="eid" property="eid"/>
+                    <result column="workId" property="workId"/>
+                    <result column="name" property="name"/>
+                    <result column="trainDate" property="trainDate"/>
+                    <result column="trainContent" property="trainContent"/>
+                    <result column="remark" property="remark"/>
+        </resultMap>
+
+    <sql id="selectVo">
+        select
+        id, eid, name,workId,trainDate, trainContent, remark
+       from employeetrain a
+    </sql>
+    <select id="getListByCondition" parameterType="com.syxx.hr.entity.Employeetrain" resultMap="BaseResultMap">
+        <include refid="selectVo"></include>
+         where 1=1
+        <if test="workId!=null and workId!=''">
+            and a.workId = #{workId}
+        </if>
+        <if test="name!=null and name!=''">
+            and a.name like "%" #{name} "%"
+        </if>
+        <if test="trainDate!=null">
+            and a.trainDate = #{trainDate}
+        </if>
+        <if test="eid!=null and eid!=''">
+            and a.eid = #{eid}
+        </if>
+    </select>
+
+</mapper>
