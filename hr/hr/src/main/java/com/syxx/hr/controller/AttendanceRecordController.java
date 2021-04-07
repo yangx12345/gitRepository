@@ -22,7 +22,6 @@ import java.util.List;
  * 考勤记录控制器4
  * test6
  * 123456
- * 我要修改bug05
  * @author yangxiao
  * @date 2021-04-06 10:24
  **/
@@ -33,6 +32,7 @@ public class AttendanceRecordController {
     @Autowired
     private AttendanceRecordService attendanceRecordService;
 
+    //bug06
     @GetMapping("getById/{id}")
     public Result getById(@PathVariable Integer id)
     {
