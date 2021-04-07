@@ -32,6 +32,7 @@ public class AttendanceRecordController {
     @Autowired
     private AttendanceRecordService attendanceRecordService;
 
+    //bug06
     @GetMapping("getById/{id}")
     public Result getById(@PathVariable Integer id)
     {
